@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cadeados — Desbloqueie com Senhas</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#7dd3fc;--glass:rgba(255,255,255,0.04)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial;background:linear-gradient(180deg,#071024 0%,#04111c 100%);color:#e6eef8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .wrap{width:100%;max-width:980px}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:0;color:#bcd6e8}
+
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    @media (max-width:720px){.grid{grid-template-columns:1fr}}
+
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03);display:flex;align-items:center;gap:14px}
+
+    .lock{width:72px;height:72px;flex:0 0 72px;display:grid;place-items:center}
+    .meta{flex:1}
+    label{display:block;font-weight:600;margin-bottom:6px}
+    input[type="password"]{width:100%;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;font-size:15px}
+    .row{display:flex;gap:8px;margin-top:10px}
+    button{padding:10px 12px;border-radius:8px;border:none;background:var(--accent);color:#042233;font-weight:700;cursor:pointer}
+    button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--accent);font-weight:600}
+    .hint{margin-top:8px;color:#9fc7db;font-size:13px}
+
+    .unlocked{outline:3px solid rgba(125,211,252,0.12)}
+    .status{font-weight:700;color:#86efac}
+    .locked-text{font-weight:700;color:#fca5a5}
+
+    .controls{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+    .footer{margin-top:18px;color:#9fbfd6;font-size:13px}
+
+    /* simple lock animation */
+    .shackle{transition:transform .45s cubic-bezier(.2,.9,.3,1)}
+    .open .shackle{transform:translateY(-18px) rotate(-20deg)}
+  </style>
+</head>
+<body>
+  <main class="wrap" role="main">
+    <header>
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden>
+        <rect width="24" height="24" rx="6" fill="#071827"></rect>
+        <path d="M7 10V7a5 5 0 0110 0v3" stroke="#7dd3fc" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="5" y="10" width="14" height="9" rx="2" stroke="#7dd3fc" stroke-width="1.25"/>
+      </svg>
+      <div>
+        <h1>Cadeados — desbloqueie com senhas</h1>
+        <p class="lead">Clique em cada cadeado, digite a senha e pressione <strong>Desbloquear</strong>.</p>
+      </div>
+    </header>
+
+    <section class="grid" aria-label="Lista de cadeados">
+
+      <!-- Cadeado template -->
+      <div class="card" id="pad-1" data-index="1" aria-live="polite">
+        <div class="lock" aria-hidden>
+          <svg class="icon-lock" width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <g class="shackle">
+              <path d="M7 10V7a5 5 0 0110 0v3" stroke="#e6eef8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <rect x="5" y="10" width="14" height="9" rx="2" fill="#071827" stroke="#e6eef8" stroke-width="1.4"/>
+            <circle cx="12" cy="14.5" r="1.2" fill="#e6eef8"/>
+          </svg>
+        </div>
+        <div class="meta">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div>
+              <div style="font-weight:700">Cadeado 1</div>
+              <div class="hint">Digite a senha de 4 dígitos</div>
+            </div>
+            <div id="state-1" class="locked-text">Travado</div>
+          </div>
+
+          <label for="pw-1" class="sr-only">Senha do cadeado 1</label>
+          <input id="pw-1" type="password" inputmode="numeric" maxlength="6" placeholder="••••" aria-describedby="state-1" />
+          <div class="row">
+            <button data-action="unlock" data-index="1">Desbloquear</button>
+            <button class="secondary" data-action="clear" data-index="1">Limpar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="pad-2" data-index="2" aria-live="polite">
+        <div class="lock">
+          <svg class="icon-lock" width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <g class="shackle">
+              <path d="M7 10V7a5 5 0 0110 0v3" stroke="#e6eef8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <rect x="5" y="10" width="14" height="9" rx="2" fill="#071827" stroke="#e6eef8" stroke-width="1.4"/>
+            <circle cx="12" cy="14.5" r="1.2" fill="#e6eef8"/>
+          </svg>
+        </div>
+        <div class="meta">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div>
+              <div style="font-weight:700">Cadeado 2</div>
+              <div class="hint">Digite a senha de 4 dígitos</div>
+            </div>
+            <div id="state-2" class="locked-text">Travado</div>
+          </div>
+          <input id="pw-2" type="password" inputmode="numeric" maxlength="6" placeholder="••••" aria-describedby="state-2" />
+          <div class="row">
+            <button data-action="unlock" data-index="2">Desbloquear</button>
+            <button class="secondary" data-action="clear" data-index="2">Limpar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="pad-3" data-index="3" aria-live="polite">
+        <div class="lock">
+          <svg class="icon-lock" width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <g class="shackle">
+              <path d="M7 10V7a5 5 0 0110 0v3" stroke="#e6eef8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <rect x="5" y="10" width="14" height="9" rx="2" fill="#071827" stroke="#e6eef8" stroke-width="1.4"/>
+            <circle cx="12" cy="14.5" r="1.2" fill="#e6eef8"/>
+          </svg>
+        </div>
+        <div class="meta">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div>
+              <div style="font-weight:700">Cadeado 3</div>
+              <div class="hint">Digite a senha de 4 dígitos</div>
+            </div>
+            <div id="state-3" class="locked-text">Travado</div>
+          </div>
+          <input id="pw-3" type="password" inputmode="numeric" maxlength="6" placeholder="••••" aria-describedby="state-3" />
+          <div class="row">
+            <button data-action="unlock" data-index="3">Desbloquear</button>
+            <button class="secondary" data-action="clear" data-index="3">Limpar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="pad-4" data-index="4" aria-live="polite">
+        <div class="lock">
+          <svg class="icon-lock" width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <g class="shackle">
+              <path d="M7 10V7a5 5 0 0110 0v3" stroke="#e6eef8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <rect x="5" y="10" width="14" height="9" rx="2" fill="#071827" stroke="#e6eef8" stroke-width="1.4"/>
+            <circle cx="12" cy="14.5" r="1.2" fill="#e6eef8"/>
+          </svg>
+        </div>
+        <div class="meta">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div>
+              <div style="font-weight:700">Cadeado 4</div>
+              <div class="hint">Digite a senha de 4 dígitos</div>
+            </div>
+            <div id="state-4" class="locked-text">Travado</div>
+          </div>
+          <input id="pw-4" type="password" inputmode="numeric" maxlength="6" placeholder="••••" aria-describedby="state-4" />
+          <div class="row">
+            <button data-action="unlock" data-index="4">Desbloquear</button>
+            <button class="secondary" data-action="clear" data-index="4">Limpar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="pad-5" data-index="5" aria-live="polite">
+        <div class="lock">
+          <svg class="icon-lock" width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <g class="shackle">
+              <path d="M7 10V7a5 5 0 0110 0v3" stroke="#e6eef8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <rect x="5" y="10" width="14" height="9" rx="2" fill="#071827" stroke="#e6eef8" stroke-width="1.4"/>
+            <circle cx="12" cy="14.5" r="1.2" fill="#e6eef8"/>
+          </svg>
+        </div>
+        <div class="meta">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div>
+              <div style="font-weight:700">Cadeado 5</div>
+              <div class="hint">Digite a senha de 4 dígitos</div>
+            </div>
+            <div id="state-5" class="locked-text">Travado</div>
+          </div>
+          <input id="pw-5" type="password" inputmode="numeric" maxlength="6" placeholder="••••" aria-describedby="state-5" />
+          <div class="row">
+            <button data-action="unlock" data-index="5">Desbloquear</button>
+            <button class="secondary" data-action="clear" data-index="5">Limpar</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="controls">
+      <button class="secondary" id="resetAll">Resetar tudo</button>
+      <button id="revealAll">Revelar senhas (temporário)</button>
+    </div>
+
+    <p class="footer">As senhas são números de 4 dígitos. Estado salvo localmente no seu navegador.</p>
+  </main>
+
+  <script>
+    (function(){
+      // Senhas fornecidas pelo usuário
+      const secrets = {
+        1: '1914',
+        2: '1939',
+        3: '1947',
+        4: '1975',
+        5: '1184'
+      };
+
+      // Estado inicial - recuperar do localStorage
+      const stateKey = 'cadeados_estado_v1';
+      let state = JSON.parse(localStorage.getItem(stateKey) || '{}');
+
+      // Utilidades
+      function el(q){return document.querySelector(q)}
+      function els(q){return Array.from(document.querySelectorAll(q))}
+
+      function updateUI(index){
+        const pad = document.getElementById('pad-'+index);
+        const st = document.getElementById('state-'+index);
+        const input = document.getElementById('pw-'+index);
+        const unlocked = !!state[index];
+        if(unlocked){
+          pad.classList.add('unlocked','open');
+          st.textContent = 'Desbloqueado';
+          st.className = 'status';
+          input.value = '';
+          input.setAttribute('disabled','');
+        } else {
+          pad.classList.remove('unlocked','open');
+          st.textContent = 'Travado';
+          st.className = 'locked-text';
+          input.removeAttribute('disabled');
+        }
+      }
+
+      // inicializa
+      [1,2,3,4,5].forEach(i=>{ if(!(''+i in state)) state[i]=false; updateUI(i); });
+
+      // Ações dos botões
+      document.addEventListener('click', function(e){
+        const btn = e.target.closest('button[data-action]');
+        if(!btn) return;
+        const action = btn.getAttribute('data-action');
+        const index = btn.getAttribute('data-index');
+        if(action === 'clear'){
+          const input = document.getElementById('pw-'+index);
+          input.value = '';
+          input.focus();
+        }
+        if(action === 'unlock'){
+          const input = document.getElementById('pw-'+index);
+          const val = (input.value || '').trim();
+          if(val === ''){
+            input.focus();
+            input.setCustomValidity('Digite a senha');
+            input.reportValidity();
+            return;
+          }
+          if(val === secrets[index]){
+            state[index]=true;
+            localStorage.setItem(stateKey, JSON.stringify(state));
+            updateUI(index);
+            announce('Cadeado ' + index + ' desbloqueado.');
+          } else {
+            // shake animation
+            input.animate([{transform:'translateX(0)'},{transform:'translateX(-8px)'},{transform:'translateX(8px)'},{transform:'translateX(0)'}],{duration:300});
+            input.value = '';
+            input.focus();
+            announce('Senha incorreta para o cadeado '+index+'.');
+          }
+        }
+      });
+
+      // Resetar tudo
+      document.getElementById('resetAll').addEventListener('click', function(){
+        if(!confirm('Tem certeza que deseja resetar todos os cadeados?')) return;
+        state = {1:false,2:false,3:false,4:false,5:false};
+        localStorage.removeItem(stateKey);
+        [1,2,3,4,5].forEach(i=>updateUI(i));
+        announce('Todos os cadeados foram resetados.');
+      });
+
+      // Revelar senhas temporariamente (útil para teste) - não recomendado em produção
+      document.getElementById('revealAll').addEventListener('click', function(){
+        if(!confirm('Revelar todas as senhas temporariamente?')) return;
+        alert('Senhas:\nCadeado 1: ' + secrets[1] + '\nCadeado 2: ' + secrets[2] + '\nCadeado 3: ' + secrets[3] + '\nCadeado 4: ' + secrets[4] + '\nCadeado 5: ' + secrets[5]);
+      });
+
+      // keyboard: Enter to submit on inputs
+      els('input[id^="pw-"]').forEach(i=>{
+        i.addEventListener('keydown', function(ev){
+          if(ev.key === 'Enter'){
+            const idx = this.id.split('-')[1];
+            document.querySelector('button[data-action="unlock"][data-index="'+idx+'"]').click();
+          }
+        });
+      });
+
+      // small live-region announcer for screen readers
+      function announce(text){
+        let region = document.getElementById('aria-announcer');
+        if(!region){
+          region = document.createElement('div');
+          region.id = 'aria-announcer';
+          region.setAttribute('aria-live','polite');
+          region.style.position = 'absolute';region.style.left='-9999px';
+          document.body.appendChild(region);
+        }
+        region.textContent = text;
+      }
+
+      // save state periodically too
+      window.addEventListener('beforeunload', ()=>localStorage.setItem(stateKey, JSON.stringify(state)));
+
+    })();
+  </script>
+</body>
+</html>
